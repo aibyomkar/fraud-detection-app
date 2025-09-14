@@ -34,50 +34,185 @@ def validate_dataset(df):
     return len(missing_columns) == 0, missing_columns
 
 # App title
-st.set_page_config(page_title="Fraud Detection", layout="wide")
-st.title("💳 Credit Card Fraud Detection System")
-st.markdown("---")
+st.set_page_config(page_title="Fraud Detection", layout="wide", page_icon="💳")
+
+# Custom CSS for better styling
+st.markdown("""
+<style>
+    .main-header {
+        text-align: center;
+        padding: 2rem 0;
+    }
+    .step-card {
+        background-color: #f0f2f6;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    .dataset-info {
+        background-color: #e8f4f8;
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+    }
+    .warning-box {
+        background-color: #fff3cd;
+        padding: 1rem;
+        border-radius: 10px;
+        border-left: 5px solid #ffc107;
+        margin: 1rem 0;
+    }
+    .success-box {
+        background-color: #d4edda;
+        padding: 1rem;
+        border-radius: 10px;
+        border-left: 5px solid #28a745;
+        margin: 1rem 0;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Sidebar
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Upload Dataset", "Train Model", "Detect Fraud", "Data Analysis"])
+st.sidebar.title("💳 Fraud Detection")
+st.sidebar.markdown("---")
+page = st.sidebar.radio("Navigation", [
+    "🏠 Home", 
+    "📋 Instructions", 
+    "📤 Upload Dataset", 
+    "🤖 Train Model", 
+    "🔍 Detect Fraud", 
+    "📊 Data Analysis"
+])
 
 # Home Page
-if page == "Home":
-    st.header("About This Project")
+if page == "🏠 Home":
+    st.markdown('<div class="main-header">', unsafe_allow_html=True)
+    st.title("💳 Credit Card Fraud Detection System")
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style="text-align: center; font-size: 1.2rem; margin-bottom: 2rem;">
+        <em>Advanced Machine Learning for Real-time Fraud Detection</em>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem;">
+            <h3>🛡️ Secure</h3>
+            <p>Advanced algorithms detect fraudulent transactions</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem;">
+            <h3>⚡ Fast</h3>
+            <p>Real-time detection with instant results</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div style="text-align: center; padding: 1rem;">
+            <h3>📈 Accurate</h3>
+            <p>Machine learning models with high precision</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    st.subheader("🎯 What This System Does")
     st.write("""
-    This application detects fraudulent credit card transactions using machine learning.
+    This application uses machine learning to detect fraudulent credit card transactions. 
+    It analyzes transaction patterns and identifies suspicious activities that may indicate fraud.
     
-    **How it works:**
-    1. **Upload Dataset**: Provide the credit card transaction dataset
-    2. **Train Model**: Train the fraud detection model
-    3. **Detect Fraud**: Test individual transactions
-    4. **Analyze Data**: Explore dataset patterns
-    
-    **Dataset Requirements:**
-    - Must be the Credit Card Fraud Detection dataset from Kaggle
-    - File: `creditcard.csv`
-    - Columns: Time, V1-V28, Amount, Class
+    **Key Features:**
+    - Real-time fraud detection
+    - Interactive data analysis
+    - Model training dashboard
+    - Comprehensive performance metrics
     """)
     
-    st.info("ℹ️ **Next Step**: Go to 'Upload Dataset' to get started")
+    st.subheader("👥 Who Is This For?")
+    st.write("""
+    - **Data Scientists**: Test machine learning models on real financial data
+    - **Security Analysts**: Analyze fraud patterns and trends
+    - **Students**: Learn about fraud detection and machine learning
+    - **Recruiters**: Evaluate fraud detection capabilities
+    """)
     
-    st.subheader("Dataset Information")
-    st.write("- **Source**: [Kaggle Credit Card Fraud Detection](https://www.kaggle.com/mlg-ulb/creditcardfraud)")
-    st.write("- **Size**: ~150 MB (284,807 transactions)")
-    st.write("- **Features**: 30 anonymized features + Amount + Time")
-    st.write("- **Target**: Class (0 = Legitimate, 1 = Fraud)")
+    st.info("💡 **Next Step**: Go to '📋 Instructions' to learn how to use this system")
+
+# Instructions Page
+elif page == "📋 Instructions":
+    st.header("📋 How to Use This System")
+    
+    st.markdown('<div class="step-card">', unsafe_allow_html=True)
+    st.subheader("Step 1: Get the Dataset")
+    st.write("You need the Credit Card Fraud Detection dataset to use this system.")
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown('<div class="dataset-info">', unsafe_allow_html=True)
+    st.subheader("📁 Required Dataset Information")
+    st.write("**Dataset Name**: Credit Card Fraud Detection")
+    st.write("**Source**: [Kaggle Dataset](https://www.kaggle.com/mlg-ulb/creditcardfraud)")
+    st.write("**File**: `creditcard.csv`")
+    st.write("**Size**: ~150 MB (284,807 transactions)")
+    st.write("**Features**: 30 anonymized features + Amount + Time")
+    st.write("**Target**: Class (0 = Legitimate, 1 = Fraud)")
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown('<div class="success-box">', unsafe_allow_html=True)
+        st.subheader("✅ If You Have the Dataset")
+        st.write("1. Go to '📤 Upload Dataset'")
+        st.write("2. Upload your `creditcard.csv` file")
+        st.write("3. Proceed to model training")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown('<div class="warning-box">', unsafe_allow_html=True)
+        st.subheader("📥 If You Don't Have the Dataset")
+        st.write("1. Click the button below to download from Kaggle")
+        st.write("2. Save the `creditcard.csv` file")
+        st.write("3. Upload it in the next step")
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Download button
+    st.subheader("📥 Download Dataset")
+    st.write("Click the link below to download the required dataset:")
+    st.markdown("""
+    <div style="text-align: center; margin: 2rem 0;">
+        <a href="https://www.kaggle.com/mlg-ulb/creditcardfraud" target="_blank" 
+           style="background-color: #0366d6; color: white; padding: 15px 30px; 
+                  text-decoration: none; border-radius: 5px; font-size: 1.2rem;">
+            📥 Download Credit Card Fraud Dataset from Kaggle
+        </a>
+        <p><em>(You'll need a free Kaggle account to download)</em></p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.info("💡 **Next Step**: Go to '📤 Upload Dataset' once you have the file")
 
 # Upload Dataset Page
-elif page == "Upload Dataset":
-    st.header("📤 Upload Dataset")
+elif page == "📤 Upload Dataset":
+    st.header("📤 Upload Your Dataset")
     
-    st.write("### Instructions:")
-    st.write("1. Download the dataset from [Kaggle](https://www.kaggle.com/mlg-ulb/creditcardfraud)")
-    st.write("2. Download the `creditcard.csv` file")
-    st.write("3. Upload it below:")
+    st.markdown('<div class="dataset-info">', unsafe_allow_html=True)
+    st.subheader("📋 Dataset Requirements")
+    st.write("Please upload the **creditcard.csv** file from Kaggle.")
+    st.write("**Required Columns**: Time, V1-V28, Amount, Class")
+    st.markdown("</div>", unsafe_allow_html=True)
     
-    uploaded_file = st.file_uploader("Choose CSV file", type="csv")
+    st.subheader("📁 Upload File")
+    uploaded_file = st.file_uploader("Choose your creditcard.csv file", type="csv")
     
     if uploaded_file is not None:
         try:
@@ -93,37 +228,48 @@ elif page == "Upload Dataset":
                     # Save the file
                     df.to_csv('data/creditcard.csv', index=False)
                     st.success("✅ Dataset uploaded and validated successfully!")
-                    st.success("✅ You can now proceed to 'Train Model'")
                     
                     # Show dataset info
-                    st.subheader("Dataset Information")
+                    st.subheader("📊 Dataset Information")
                     col1, col2, col3 = st.columns(3)
                     with col1:
-                        st.metric("Rows", f"{len(df):,}")
+                        st.metric("Total Rows", f"{len(df):,}")
                     with col2:
-                        st.metric("Columns", f"{len(df.columns)}")
+                        st.metric("Total Columns", f"{len(df.columns)}")
                     with col3:
                         fraud_count = df['Class'].sum()
                         st.metric("Fraud Cases", f"{fraud_count:,}")
                     
+                    # Show class distribution
+                    class_counts = df['Class'].value_counts()
+                    st.write(f"**Fraud Rate**: {class_counts[1]/len(df)*100:.4f}%")
+                    
                     # Show sample data
-                    st.subheader("Sample Data")
+                    st.subheader("📋 Sample Data")
                     st.dataframe(df.head())
+                    
+                    st.success("🚀 You can now proceed to '🤖 Train Model'")
+                    
                 else:
-                    st.error(f"❌ Invalid dataset format. Missing columns: {missing_cols}")
-                    st.write("Please upload the correct creditcard.csv file from Kaggle.")
+                    st.error(f"❌ Invalid dataset format.")
+                    st.write(f"**Missing columns**: {missing_cols}")
+                    st.write("Please upload the correct **creditcard.csv** file from Kaggle.")
                     
         except Exception as e:
             st.error(f"❌ Error processing file: {str(e)}")
+    
+    # Reminder about getting the dataset
+    if not uploaded_file:
+        st.info("💡 Don't have the dataset? Go to '📋 Instructions' to download it from Kaggle")
 
 # Train Model Page
-elif page == "Train Model":
-    st.header("🤖 Model Training")
+elif page == "🤖 Train Model":
+    st.header("🤖 Train Fraud Detection Model")
     
     # Check if dataset exists
     if not os.path.exists('data/creditcard.csv'):
-        st.warning("⚠️ Dataset not found! Please upload the dataset first.")
-        st.info("Go to 'Upload Dataset' section to upload your creditcard.csv file")
+        st.warning("⚠️ Dataset not found!")
+        st.info("Please upload your dataset first in the '📤 Upload Dataset' section.")
         st.stop()
     
     try:
@@ -134,19 +280,18 @@ elif page == "Train Model":
         st.error(f"❌ Error loading dataset: {str(e)}")
         st.stop()
     
-    # Show data preview
-    with st.expander("Dataset Preview"):
-        st.dataframe(df.head())
-    
-    # Training options
-    st.subheader("Training Options")
+    st.subheader("⚙️ Training Configuration")
     col1, col2 = st.columns(2)
     with col1:
         test_size = st.slider("Test Size (%)", 10, 50, 20)
     with col2:
         random_state = st.number_input("Random State", 0, 1000, 42)
     
-    if st.button("🚀 Train Model"):
+    st.markdown('<div class="warning-box">', unsafe_allow_html=True)
+    st.write("⚠️ **Training may take 2-5 minutes depending on your dataset size**")
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    if st.button("🚀 Start Training", type="primary", use_container_width=True):
         with st.spinner("Training model... This may take a few minutes..."):
             try:
                 # Prepare features and target
@@ -179,7 +324,7 @@ elif page == "Train Model":
                 st.success("✅ Model trained successfully!")
                 
                 # Show metrics
-                st.subheader("Model Performance")
+                st.subheader("📈 Model Performance")
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Accuracy", f"{accuracy:.4f}")
@@ -189,23 +334,24 @@ elif page == "Train Model":
                     st.metric("Test Samples", f"{len(y_test)}")
                 
                 # Classification report
-                st.subheader("Detailed Metrics")
+                st.subheader("📋 Detailed Metrics")
                 report = classification_report(y_test, y_pred, output_dict=True)
                 df_report = pd.DataFrame(report).transpose()
                 st.dataframe(df_report)
                 
                 # Confusion Matrix
-                st.subheader("Confusion Matrix")
+                st.subheader("📊 Confusion Matrix")
                 cm = confusion_matrix(y_test, y_pred)
                 fig = px.imshow(cm, 
                                labels=dict(x="Predicted", y="Actual"),
                                x=['Legitimate', 'Fraud'],
                                y=['Legitimate', 'Fraud'],
-                               text_auto=True)
+                               text_auto=True,
+                               color_continuous_scale='Blues')
                 st.plotly_chart(fig)
                 
                 # Feature importance
-                st.subheader("Top 15 Feature Importances")
+                st.subheader("🔝 Top 15 Feature Importances")
                 feature_importance = pd.DataFrame({
                     'feature': X.columns,
                     'importance': model.feature_importances_
@@ -216,66 +362,72 @@ elif page == "Train Model":
                             title='Top 15 Most Important Features')
                 st.plotly_chart(fig)
                 
+                st.success("🚀 You can now proceed to '🔍 Detect Fraud'")
+                
             except Exception as e:
                 st.error(f"❌ Error during training: {str(e)}")
 
 # Detect Fraud Page
-elif page == "Detect Fraud":
+elif page == "🔍 Detect Fraud":
     st.header("🔍 Fraud Detection")
     
     # Check if model exists
     model = load_model()
     if model is None:
-        st.warning("⚠️ Model not found! Please train the model first.")
-        st.info("Go to 'Train Model' section to train your fraud detection model")
+        st.warning("⚠️ Model not found!")
+        st.info("Please train the model first in the '🤖 Train Model' section.")
         st.stop()
     
+    st.markdown('<div class="dataset-info">', unsafe_allow_html=True)
+    st.write("Enter transaction details below to check for potential fraud.")
+    st.markdown("</div>", unsafe_allow_html=True)
+    
     # Transaction input form
-    st.subheader("Enter Transaction Details")
+    st.subheader("💳 Enter Transaction Details")
     
     # Create a more user-friendly input form
     col1, col2, col3 = st.columns(3)
     
     with col1:
         st.markdown("**Basic Info**")
-        time = st.number_input("Time (seconds)", min_value=0, value=0, help="Time of transaction")
-        amount = st.number_input("Amount ($)", min_value=0.0, value=0.0, help="Transaction amount", step=0.01)
+        time = st.number_input("⏱️ Time (seconds)", min_value=0, value=0, help="Time of transaction")
+        amount = st.number_input("💰 Amount ($)", min_value=0.0, value=0.0, help="Transaction amount", step=0.01)
         
         st.markdown("**V Features (1-9)**")
-        v1 = st.number_input("V1", value=0.0)
-        v2 = st.number_input("V2", value=0.0)
-        v3 = st.number_input("V3", value=0.0)
-        v4 = st.number_input("V4", value=0.0)
-        v5 = st.number_input("V5", value=0.0)
-        v6 = st.number_input("V6", value=0.0)
-        v7 = st.number_input("V7", value=0.0)
-        v8 = st.number_input("V8", value=0.0)
-        v9 = st.number_input("V9", value=0.0)
+        v1 = st.number_input("📊 V1", value=0.0)
+        v2 = st.number_input("📊 V2", value=0.0)
+        v3 = st.number_input("📊 V3", value=0.0)
+        v4 = st.number_input("📊 V4", value=0.0)
+        v5 = st.number_input("📊 V5", value=0.0)
+        v6 = st.number_input("📊 V6", value=0.0)
+        v7 = st.number_input("📊 V7", value=0.0)
+        v8 = st.number_input("📊 V8", value=0.0)
+        v9 = st.number_input("📊 V9", value=0.0)
     
     with col2:
         st.markdown("**V Features (10-18)**")
-        v10 = st.number_input("V10", value=0.0)
-        v11 = st.number_input("V11", value=0.0)
-        v12 = st.number_input("V12", value=0.0)
-        v13 = st.number_input("V13", value=0.0)
-        v14 = st.number_input("V14", value=0.0)
-        v15 = st.number_input("V15", value=0.0)
-        v16 = st.number_input("V16", value=0.0)
-        v17 = st.number_input("V17", value=0.0)
-        v18 = st.number_input("V18", value=0.0)
+        v10 = st.number_input("📊 V10", value=0.0)
+        v11 = st.number_input("📊 V11", value=0.0)
+        v12 = st.number_input("📊 V12", value=0.0)
+        v13 = st.number_input("📊 V13", value=0.0)
+        v14 = st.number_input("📊 V14", value=0.0)
+        v15 = st.number_input("📊 V15", value=0.0)
+        v16 = st.number_input("📊 V16", value=0.0)
+        v17 = st.number_input("📊 V17", value=0.0)
+        v18 = st.number_input("📊 V18", value=0.0)
     
     with col3:
         st.markdown("**V Features (19-28)**")
-        v19 = st.number_input("V19", value=0.0)
-        v20 = st.number_input("V20", value=0.0)
-        v21 = st.number_input("V21", value=0.0)
-        v22 = st.number_input("V22", value=0.0)
-        v23 = st.number_input("V23", value=0.0)
-        v24 = st.number_input("V24", value=0.0)
-        v25 = st.number_input("V25", value=0.0)
-        v26 = st.number_input("V26", value=0.0)
-        v27 = st.number_input("V27", value=0.0)
-        v28 = st.number_input("V28", value=0.0)
+        v19 = st.number_input("📊 V19", value=0.0)
+        v20 = st.number_input("📊 V20", value=0.0)
+        v21 = st.number_input("📊 V21", value=0.0)
+        v22 = st.number_input("📊 V22", value=0.0)
+        v23 = st.number_input("📊 V23", value=0.0)
+        v24 = st.number_input("📊 V24", value=0.0)
+        v25 = st.number_input("📊 V25", value=0.0)
+        v26 = st.number_input("📊 V26", value=0.0)
+        v27 = st.number_input("📊 V27", value=0.0)
+        v28 = st.number_input("📊 V28", value=0.0)
     
     # Prediction button
     st.markdown("---")
@@ -292,7 +444,7 @@ elif page == "Detect Fraud":
         probability = model.predict_proba(input_data)[0]
         
         # Display results
-        st.subheader("Prediction Results")
+        st.subheader("🎯 Prediction Results")
         result_col1, result_col2 = st.columns(2)
         
         with result_col1:
@@ -310,23 +462,24 @@ elif page == "Detect Fraud":
                 y=probability,
                 marker_color=['green', 'red']
             )])
-            fig.update_layout(title="Fraud Probability")
+            fig.update_layout(title="Fraud Probability Distribution")
             st.plotly_chart(fig)
         
         # Additional insights
+        st.markdown("---")
         if prediction == 1:
-            st.info("⚠️ This transaction has been flagged as potentially fraudulent. Please review manually.")
+            st.info("⚠️ **Alert**: This transaction has been flagged as potentially fraudulent. Please review manually.")
         else:
-            st.info("✅ This transaction appears to be legitimate based on the model.")
+            st.info("✅ **Status**: This transaction appears to be legitimate based on the model analysis.")
 
 # Data Analysis Page
-elif page == "Data Analysis":
+elif page == "📊 Data Analysis":
     st.header("📊 Dataset Analysis")
     
     # Check if dataset exists
     if not os.path.exists('data/creditcard.csv'):
-        st.warning("⚠️ Dataset not found! Please upload the dataset first.")
-        st.info("Go to 'Upload Dataset' section to upload your creditcard.csv file")
+        st.warning("⚠️ Dataset not found!")
+        st.info("Please upload your dataset first in the '📤 Upload Dataset' section.")
         st.stop()
     
     try:
@@ -336,7 +489,7 @@ elif page == "Data Analysis":
         st.success(f"✅ Dataset loaded: {len(df):,} rows")
         
         # Class distribution
-        st.subheader("Class Distribution")
+        st.subheader("📊 Class Distribution")
         class_counts = df['Class'].value_counts()
         
         col1, col2, col3, col4 = st.columns(4)
@@ -355,26 +508,35 @@ elif page == "Data Analysis":
         st.plotly_chart(fig)
         
         # Amount distribution
-        st.subheader("Transaction Amount Distribution")
+        st.subheader("💰 Transaction Amount Distribution")
         fig = px.histogram(df, x='Amount', color='Class', 
                           title='Amount Distribution by Class',
                           log_y=True, nbins=50)
         st.plotly_chart(fig)
         
         # Time distribution
-        st.subheader("Transaction Time Distribution")
+        st.subheader("⏱️ Transaction Time Distribution")
         fig = px.histogram(df, x='Time', color='Class',
                           title='Time Distribution by Class',
                           nbins=50)
         st.plotly_chart(fig)
         
         # Statistical summary
-        st.subheader("Statistical Summary")
+        st.subheader("📋 Statistical Summary")
         st.dataframe(df.describe())
         
         # Sample data
-        st.subheader("Sample Data")
+        st.subheader("📋 Sample Data")
         st.dataframe(df.head(10))
         
     except Exception as e:
-        st.error(f"❌ Error loading data: {str(e)}")
+        st.error(f"❌ Error loading  {str(e)}")
+
+# Footer
+st.markdown("---")
+st.markdown("""
+<div style="text-align: center; color: #666;">
+    <p>💳 Credit Card Fraud Detection System | Built with Streamlit & Scikit-learn</p>
+    <p>For recruiters: Download the dataset from Kaggle to test this system</p>
+</div>
+""", unsafe_allow_html=True)
