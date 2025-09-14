@@ -18,7 +18,7 @@ env/
 *.log
 *.sqlite3
 
-# Model files (if saved locally)
+# Model artifacts (auto-generated)
 models/
 *.pkl
 *.h5
@@ -27,3 +27,8 @@ models/
 
 # Environment variables
 .env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
