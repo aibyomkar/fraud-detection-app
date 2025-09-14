@@ -1,6 +1,9 @@
 import os
 import subprocess
 import sys
+import urllib.request
+import shutil
+import stat
 import pandas as pd
 import streamlit as st
 import numpy as np
@@ -12,28 +15,69 @@ import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# --- FIX FOR STREAMLIT CLOUD: Auto-download large file via Git LFS ---
-def ensure_lfs_file(filepath):
-    if not os.path.exists(filepath):
-        st.warning(f"⚠️ {filepath} not found. Attempting to download via Git LFS...")
-        try:
-            # Initialize Git LFS
-            subprocess.run(["git", "lfs", "install"], check=True, capture_output=True)
-            # Pull the large file
-            subprocess.run(["git", "lfs", "pull"], check=True, capture_output=True)
-            st.success(f"✅ Successfully downloaded {filepath} via Git LFS.")
-        except subprocess.CalledProcessError as e:
-            st.error(f"❌ Failed to download {filepath} via Git LFS:")
-            st.code(e.stderr.decode())
-            st.stop()
-        except FileNotFoundError:
-            st.error("❌ Git LFS is not installed on this system. Please contact support.")
-            st.stop()
+# --- 1. AUTO-INSTALL GIT LFS ON STREAMLIT CLOUD ---
+def install_git_lfs():
+    """Download and install Git LFS binary for Linux (Streamlit Cloud)"""
+    lfs_bin_path = "/tmp/git-lfs"
+    if os.path.exists(lfs_bin_path):
+        return
 
-# Ensure creditcard.csv is available
+    print("📥 Downloading Git LFS binary...")
+    try:
+        # Download Git LFS for Linux (64-bit)
+        url = "https://github.com/git-lfs/git-lfs/releases/download/v3.7.0/git-lfs-linux-amd64-v3.7.0.tar.gz"
+        with urllib.request.urlopen(url) as response:
+            with open("/tmp/git-lfs.tar.gz", "wb") as f:
+                shutil.copyfileobj(response, f)
+
+        # Extract tar.gz
+        subprocess.run(["tar", "-xzf", "/tmp/git-lfs.tar.gz", "-C", "/tmp"], check=True)
+
+        # Move binary to /tmp/git-lfs
+        shutil.move("/tmp/git-lfs-3.7.0/git-lfs", lfs_bin_path)
+        os.chmod(lfs_bin_path, stat.S_IEXEC | stat.S_IREAD | stat.S_IWRITE)  # Make executable
+
+        # Clean up
+        shutil.rmtree("/tmp/git-lfs-3.7.0")
+        os.remove("/tmp/git-lfs.tar.gz")
+
+        print("✅ Git LFS installed successfully at", lfs_bin_path)
+
+    except Exception as e:
+        st.error(f"❌ Failed to download/install Git LFS: {e}")
+        st.stop()
+
+# --- 2. ENSURE LARGE FILE IS AVAILABLE VIA LFS ---
+def ensure_lfs_file(filepath):
+    """Check if file exists; if not, install LFS and pull it."""
+    if os.path.exists(filepath):
+        return
+
+    st.warning(f"⚠️ {filepath} not found. Attempting to download via Git LFS...")
+
+    # Install Git LFS if not present
+    install_git_lfs()
+
+    # Configure Git to use our downloaded LFS binary
+    git_lfs_bin = "/tmp/git-lfs"
+
+    try:
+        # Initialize LFS with custom binary
+        subprocess.run([git_lfs_bin, "install"], check=True, capture_output=True)
+        # Pull the large file
+        subprocess.run([git_lfs_bin, "pull"], check=True, capture_output=True)
+        st.success(f"✅ Successfully downloaded {filepath} via Git LFS.")
+    except subprocess.CalledProcessError as e:
+        st.error(f"❌ Failed to download {filepath} via Git LFS:")
+        st.code(e.stderr.decode())
+        st.stop()
+    except Exception as e:
+        st.error(f"Unexpected error: {e}")
+        st.stop()
+
+# --- 3. LOAD DATA ---
 ensure_lfs_file("data/creditcard.csv")
 
-# --- Load Data ---
 @st.cache_data(show_spinner="Loading dataset...")
 def load_data():
     df = pd.read_csv("data/creditcard.csv")
@@ -41,7 +85,7 @@ def load_data():
 
 df = load_data()
 
-# --- Preprocessing ---
+# --- 4. PREPROCESSING ---
 @st.cache_data(show_spinner="Preprocessing data...")
 def preprocess_data(df):
     X = df.drop(columns=['Class'])
@@ -55,14 +99,13 @@ def preprocess_data(df):
 
 X, y, scaler = preprocess_data(df)
 
-# --- Train Model ---
+# --- 5. TRAIN MODEL ---
 @st.cache_resource(show_spinner="Training model...")
 def train_model(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
     model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
     model.fit(X_train, y_train)
     
-    # Save model and scaler
     os.makedirs("models", exist_ok=True)
     joblib.dump(model, "models/model.pkl")
     joblib.dump(scaler, "models/scaler.pkl")
@@ -71,12 +114,12 @@ def train_model(X, y):
 
 model, X_test, y_test = train_model(X, y)
 
-# --- Evaluation ---
+# --- 6. EVALUATION ---
 y_pred = model.predict(X_test)
 y_proba = model.predict_proba(X_test)[:, 1]
 auc_score = roc_auc_score(y_test, y_proba)
 
-# --- Streamlit UI ---
+# --- 7. STREAMLIT UI ---
 st.title("🔍 Fraud Detection App")
 st.write("Predicts fraudulent credit card transactions using a Random Forest model.")
 
@@ -112,10 +155,8 @@ with col3:
     for i in range(1, 29):  # V1 to V28
         v_features.append(st.number_input(f"V{i}", value=0.0))
 
-# Prepare input
 input_data = np.array([[time, amount] + v_features])
 
-# Predict
 if st.button("🔍 Detect Fraud"):
     try:
         input_scaled = scaler.transform(input_data)
@@ -131,4 +172,4 @@ if st.button("🔍 Detect Fraud"):
 
 # Footer
 st.markdown("---")
-st.caption("Built with Streamlit | Data: Credit Card Fraud Detection Dataset | Model: Random Forest | LFS Managed by GitHub")
+st.caption("Built with Streamlit | Data: Credit Card Fraud Detection Dataset | Model: Random Forest | Auto LFS Installed on Deploy")
