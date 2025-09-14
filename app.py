@@ -15,6 +15,14 @@ for directory in ['data', 'models', '.streamlit']:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+# Check if dataset exists function
+def dataset_exists():
+    return os.path.exists('data/creditcard.csv')
+
+# Check if model exists function
+def model_exists():
+    return os.path.exists('models/fraud_model.pkl')
+
 # Load model function with error handling
 @st.cache_resource
 def load_model():
@@ -267,9 +275,11 @@ elif page == "🤖 Train Model":
     st.header("🤖 Train Fraud Detection Model")
     
     # Check if dataset exists
-    if not os.path.exists('data/creditcard.csv'):
+    if not dataset_exists():
         st.warning("⚠️ Dataset not found!")
         st.info("Please upload your dataset first in the '📤 Upload Dataset' section.")
+        st.markdown("---")
+        st.write("📊 **Current Status**: No dataset uploaded")
         st.stop()
     
     try:
@@ -372,10 +382,17 @@ elif page == "🔍 Detect Fraud":
     st.header("🔍 Fraud Detection")
     
     # Check if model exists
-    model = load_model()
-    if model is None:
+    if not model_exists():
         st.warning("⚠️ Model not found!")
         st.info("Please train the model first in the '🤖 Train Model' section.")
+        st.markdown("---")
+        st.write("🤖 **Current Status**: No trained model available")
+        st.stop()
+    
+    # Load model
+    model = load_model()
+    if model is None:
+        st.error("❌ Error loading model")
         st.stop()
     
     st.markdown('<div class="dataset-info">', unsafe_allow_html=True)
@@ -477,9 +494,11 @@ elif page == "📊 Data Analysis":
     st.header("📊 Dataset Analysis")
     
     # Check if dataset exists
-    if not os.path.exists('data/creditcard.csv'):
+    if not dataset_exists():
         st.warning("⚠️ Dataset not found!")
         st.info("Please upload your dataset first in the '📤 Upload Dataset' section.")
+        st.markdown("---")
+        st.write("📊 **Current Status**: No dataset uploaded")
         st.stop()
     
     try:
