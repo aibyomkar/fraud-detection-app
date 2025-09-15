@@ -159,8 +159,8 @@ page = st.sidebar.radio("Navigate", [
 
 # Home Page
 if page == "🏠 Home":
-    st.markdown('<h1 class="main-header">💳 Creddy ML System</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Advanced Fraud Detection System</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">💳 Creddy</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Credit Card Fraud Detection System</p>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     with col1:
