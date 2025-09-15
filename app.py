@@ -184,7 +184,7 @@ elif page == "📤 Upload":
     col1, col2, col3 = st.columns([4, 1, 4])
 
     with col1:
-        st.markdown('<div class="card" style="height: 100%;" text-align: "center;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
         st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
         
     with col2:
