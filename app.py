@@ -178,7 +178,7 @@ if page == "🏠 Home":
 elif page == "📤 Upload":
     st.markdown('<h1 class="main-header">📤 Upload Dataset</h1>', unsafe_allow_html=True)
     
-    st.markdown('<div class="card"><h2>📥 Get Dataset</h2></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h2>📋 Dataset Requirements</h2><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
     
     # Create three columns: left content, OR, right content
     col1, col2, col3 = st.columns([4, 1, 4])
@@ -194,11 +194,7 @@ elif page == "📤 Upload":
         st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
         
     uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
-
-    
-    
-    st.markdown('<div class="card"><h3>📋 Dataset Requirements</h3><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
-    
+        
     # Handle file upload
     if uploaded_file is not None:
         try:
