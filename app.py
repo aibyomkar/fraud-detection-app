@@ -69,7 +69,6 @@ st.markdown("""
     }
     
     .card {
-        text-align: center;
         background: rgba(13, 27, 42, 0.7);
         border: 1px solid rgba(0, 245, 255, 0.3);
         border-radius: 15px;
