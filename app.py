@@ -592,19 +592,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -612,9 +599,7 @@ import joblib
 import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
 import plotly.express as px
-import plotly.graph_objects as go
 from io import StringIO
 
 # Create necessary directories
@@ -718,19 +703,16 @@ st.markdown("""
         box-shadow: 0 5px 15px rgba(0, 245, 255, 0.4);
     }
     
-    .metric-card {
-        background: rgba(138, 43, 226, 0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        text-align: center;
+    .download-btn {
+        background: linear-gradient(90deg, #00c9ff, #92fe9d) !important;
+        color: #0a0e17 !important;
+        font-weight: bold !important;
     }
     
-    h1, h2, h3 {
-        color: var(--primary);
-    }
-    
-    .sidebar .sidebar-content {
-        background: linear-gradient(180deg, var(--light) 0%, var(--dark) 100%);
+    .upload-btn {
+        background: linear-gradient(90deg, var(--accent), #ff7bac) !important;
+        color: white !important;
+        font-weight: bold !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -766,13 +748,25 @@ if page == "🏠 Home":
 elif page == "📤 Upload":
     st.markdown('<h1 class="main-header">📤 Upload Dataset</h1>', unsafe_allow_html=True)
     
-    st.markdown('<div class="card"><h3>📁 Required Dataset</h3><p><a href="https://www.kaggle.com/mlg-ulb/creditcardfraud" target="_blank">Download from Kaggle</a><br>File: creditcard.csv<br>Size: ~150MB</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h2>📥 Get Dataset</h2></div>', unsafe_allow_html=True)
     
-    uploaded_file = st.file_uploader("Upload creditcard.csv", type="csv")
+    col1, col2 = st.columns(2)
     
+    with col1:
+        st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
+        st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
+        st.markdown('<p><strong>File:</strong> creditcard.csv<br><strong>Size:</strong> ~150MB<br><strong>Rows:</strong> 284,807</p>', unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
+        uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
+    
+    st.markdown('<div class="card"><h3>📋 Dataset Requirements</h3><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
+    
+    # Handle file upload
     if uploaded_file is not None:
         try:
-            with st.spinner("Processing..."):
+            with st.spinner("Processing uploaded file..."):
                 stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
                 df = pd.read_csv(stringio)
                 
@@ -781,12 +775,13 @@ elif page == "📤 Upload":
                 if is_valid:
                     df.to_csv('data/creditcard.csv', index=False)
                     st.markdown('<div class="success-box"><h3>✅ Success!</h3><p>Dataset uploaded successfully</p></div>', unsafe_allow_html=True)
-                    st.metric("Rows", f"{len(df):,}")
+                    st.metric("Total Rows", f"{len(df):,}")
                     st.metric("Fraud Cases", f"{df['Class'].sum():,}")
+                    st.success("🚀 You can now proceed to '🤖 Train' model")
                 else:
-                    st.error(f"Invalid dataset. Missing: {missing_cols}")
+                    st.error(f"❌ Invalid dataset format. Missing columns: {missing_cols}")
         except Exception as e:
-            st.error(f"Error: {str(e)}")
+            st.error(f"❌ Error processing file: {str(e)}")
 
 # Train Page
 elif page == "🤖 Train":
@@ -823,6 +818,7 @@ elif page == "🤖 Train":
                 accuracy = model.score(X_test, y_test)
                 st.markdown('<div class="success-box"><h3>✅ Training Complete!</h3></div>', unsafe_allow_html=True)
                 st.metric("Accuracy", f"{accuracy:.4f}")
+                st.success("🚀 You can now proceed to '🔍 Detect' fraud")
                 
     except Exception as e:
         st.error(f"Error: {str(e)}")
