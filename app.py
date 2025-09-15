@@ -148,7 +148,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Sidebar
-st.sidebar.markdown('<h2 style="color: #00f5ff;">💳 FraudGuard</h2>', unsafe_allow_html=True)
+st.sidebar.markdown('<h2 style="color: #00f5ff;">💳 Creddy</h2>', unsafe_allow_html=True)
 page = st.sidebar.radio("Navigate", [
     "🏠 Home", 
     "📤 Upload", 
@@ -159,12 +159,12 @@ page = st.sidebar.radio("Navigate", [
 
 # Home Page
 if page == "🏠 Home":
-    st.markdown('<h1 class="main-header">💳 FraudGuard AI</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">💳 Creddy ML System</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Advanced Fraud Detection System</p>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown('<div class="card"><h3>🛡️ Secure</h3><p>AI-powered detection</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="card"><h3>🛡️ Secure</h3><p>ML-powered detection</p></div>', unsafe_allow_html=True)
     with col2:
         st.markdown('<div class="card"><h3>⚡ Fast</h3><p>Real-time analysis</p></div>', unsafe_allow_html=True)
     with col3:
@@ -185,7 +185,8 @@ elif page == "📤 Upload":
     
     with col1:
         st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
+    
+    uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
     
     with col2:
         st.markdown('<div class="or-container"><div class="line"></div><div class="or-text">OR</div><div class="line"></div></div>', unsafe_allow_html=True)
