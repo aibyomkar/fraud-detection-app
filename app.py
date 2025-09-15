@@ -753,7 +753,7 @@ elif page == "📤 Upload":
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
+        st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p>st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")</div>', unsafe_allow_html=True)
         st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
         # st.markdown('<p><strong>File:</strong> creditcard.csv<br><strong>Size:</strong> ~150MB<br><strong>Rows:</strong> 284,807</p>', unsafe_allow_html=True)
     
