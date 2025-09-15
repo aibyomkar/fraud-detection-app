@@ -755,7 +755,7 @@ elif page == "📤 Upload":
     with col1:
         st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
         st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
-        st.markdown('<p><strong>File:</strong> creditcard.csv<br><strong>Size:</strong> ~150MB<br><strong>Rows:</strong> 284,807</p>', unsafe_allow_html=True)
+        # st.markdown('<p><strong>File:</strong> creditcard.csv<br><strong>Size:</strong> ~150MB<br><strong>Rows:</strong> 284,807</p>', unsafe_allow_html=True)
     
     with col2:
         st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
