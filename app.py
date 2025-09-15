@@ -170,7 +170,7 @@ if page == "🏠 Home":
     with col3:
         st.markdown('<div class="card"><h3>📈 Accurate</h3><p>99%+ precision</p></div>', unsafe_allow_html=True)
     
-    st.markdown('<div class="card"><h3>🎯 System Overview</h3><p>This system detects fraudulent credit card transactions using machine learning. Requires the Kaggle Credit Card Fraud dataset.</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h3>🎯 System Overview</h3><p>This system detects fraudulent credit card transactions using machine learning. Requires the Credit Card Fraud dataset.</p></div>', unsafe_allow_html=True)
     
     st.info("💡 Next: Upload dataset in '📤 Upload' section")
 
