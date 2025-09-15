@@ -759,7 +759,8 @@ elif page == "📤 Upload":
     
     with col2:
         st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
+        
+    uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
     
     st.markdown('<div class="card"><h3>📋 Dataset Requirements</h3><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
     
