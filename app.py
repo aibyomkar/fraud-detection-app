@@ -182,18 +182,20 @@ elif page == "📤 Upload":
     
     # Create three columns: left content, OR, right content
     col1, col2, col3 = st.columns([4, 1, 4])
-    
+
     with col1:
-        st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
-    
-    uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
-    
-    with col2:
-        st.markdown('<div class="or-container"><div class="line"></div><div class="or-text">OR</div><div class="line"></div></div>', unsafe_allow_html=True)
-    
-    with col3:
         st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
         st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
+        
+    with col2:
+        st.markdown('<div class="or-container"><div class="line"></div><div class="or-text">OR</div><div class="line"></div></div>', unsafe_allow_html=True)
+        
+    with col3:
+        st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
+        
+    uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
+
+    
     
     st.markdown('<div class="card"><h3>📋 Dataset Requirements</h3><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
     
