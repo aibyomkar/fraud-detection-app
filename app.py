@@ -1,31 +1,27 @@
+# CRITICAL: Disable file watching at the very beginning to prevent inotify errors
+import os
+os.environ['STREAMLIT_WATCHER_TYPE'] = 'none'
+os.environ['STREAMLIT_SERVER_ENABLE_STATIC_SERVING'] = 'false'
+os.environ['STREAMLIT_GLOBAL_DISABLE_WATCHDOG_WARNING'] = 'true'
+
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import plotly.express as px
 from io import StringIO
 
-# Disable file watching to prevent inotify limit error
-os.environ['STREAMLIT_WATCHER_TYPE'] = 'none'
-os.environ['STREAMLIT_SERVER_ENABLE_STATIC_SERVING'] = 'false'
+# Create directories
+os.makedirs('data', exist_ok=True)
+os.makedirs('models', exist_ok=True)
 
-# Create necessary directories
-for directory in ['data', 'models']:
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-# Check if dataset exists function
 def dataset_exists():
     return os.path.exists('data/creditcard.csv')
 
-# Check if model exists function
 def model_exists():
     return os.path.exists('models/fraud_model.pkl')
 
-# Load model function
 @st.cache_resource
 def load_model():
     try:
@@ -33,7 +29,6 @@ def load_model():
     except FileNotFoundError:
         return None
 
-# Validate uploaded dataset
 def validate_dataset(df):
     required_columns = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
                        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
@@ -342,8 +337,8 @@ elif page == "📊 Analysis":
         with col3:
             st.metric("Fraud Rate", f"{class_counts[1]/len(df)*100:.4f}%")
         
-        fig = px.pie(values=class_counts.values, names=['Legitimate', 'Fraud'])
-        st.plotly_chart(fig)
+        # Simple visualization without plotly to reduce dependencies
+        st.bar_chart(class_counts)
         
     except Exception as e:
         st.error(f"Error: {str(e)}")
