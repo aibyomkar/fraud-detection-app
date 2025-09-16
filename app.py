@@ -8,20 +8,20 @@ from sklearn.model_selection import train_test_split
 import plotly.express as px
 from io import StringIO
 
-# Create necessary directories
+# Creating necessary directories
 for directory in ['data', 'models']:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-# Check if dataset exists function
+# Checking if dataset exists function
 def dataset_exists():
     return os.path.exists('data/creditcard.csv')
 
-# Check if model exists function
+# Checking if model exists function
 def model_exists():
     return os.path.exists('models/fraud_model.pkl')
 
-# Load model function
+# Loading model function
 @st.cache_resource
 def load_model():
     try:
@@ -29,7 +29,7 @@ def load_model():
     except FileNotFoundError:
         return None
 
-# Validate uploaded dataset
+# Validating uploaded dataset
 def validate_dataset(df):
     required_columns = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
                        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
@@ -38,7 +38,7 @@ def validate_dataset(df):
     missing_columns = [col for col in required_columns if col not in df.columns]
     return len(missing_columns) == 0, missing_columns
 
-# Futuristic styling
+# styling
 st.markdown("""
 <style>
     :root {
