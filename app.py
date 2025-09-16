@@ -8,20 +8,16 @@ from sklearn.model_selection import train_test_split
 import plotly.express as px
 from io import StringIO
 
-# Creating necessary directories
 for directory in ['data', 'models']:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-# Checking if dataset exists function
 def dataset_exists():
     return os.path.exists('data/creditcard.csv')
 
-# Checking if model exists function
 def model_exists():
     return os.path.exists('models/fraud_model.pkl')
 
-# Loading model function
 @st.cache_resource
 def load_model():
     try:
@@ -29,7 +25,6 @@ def load_model():
     except FileNotFoundError:
         return None
 
-# Validating uploaded dataset
 def validate_dataset(df):
     required_columns = ['Time', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10',
                        'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20',
@@ -38,7 +33,6 @@ def validate_dataset(df):
     missing_columns = [col for col in required_columns if col not in df.columns]
     return len(missing_columns) == 0, missing_columns
 
-# styling
 st.markdown("""
 <style>
     :root {
@@ -147,7 +141,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Sidebar
 st.sidebar.markdown('<h2 style="color: #00f5ff;">💳 Creddy</h2>', unsafe_allow_html=True)
 page = st.sidebar.radio("Navigate", [
     "🏠 Home", 
@@ -157,7 +150,6 @@ page = st.sidebar.radio("Navigate", [
     "📊 Analysis"
 ])
 
-# Home Page
 if page == "🏠 Home":
     st.markdown('<h1 class="main-header">💳 Creddy</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Fraud Detection In Credit Card Transactions</p>', unsafe_allow_html=True)
@@ -174,13 +166,11 @@ if page == "🏠 Home":
     
     st.info("💡 Next: Upload dataset in '📤 Upload' section")
 
-# Upload Page
 elif page == "📤 Upload":
     st.markdown('<h1 class="main-header">📤 Upload Dataset</h1>', unsafe_allow_html=True)
     
     st.markdown('<div class="card"><h2>📋 Dataset Requirements</h2><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
     
-    # Create three columns: left content, OR, right content
     col1, col2, col3 = st.columns([4, 1, 4])
 
     with col1:
@@ -195,7 +185,6 @@ elif page == "📤 Upload":
         
     uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
         
-    # Handle file upload
     if uploaded_file is not None:
         try:
             with st.spinner("Processing uploaded file..."):
@@ -215,7 +204,6 @@ elif page == "📤 Upload":
         except Exception as e:
             st.error(f"❌ Error processing file: {str(e)}")
 
-# Train Page
 elif page == "🤖 Train":
     st.markdown('<h1 class="main-header">🤖 Train Model</h1>', unsafe_allow_html=True)
     
@@ -255,7 +243,6 @@ elif page == "🤖 Train":
     except Exception as e:
         st.error(f"Error: {str(e)}")
 
-# Detect Page
 elif page == "🔍 Detect":
     st.markdown('<h1 class="main-header">🔍 Fraud Detection</h1>', unsafe_allow_html=True)
     
@@ -305,7 +292,6 @@ elif page == "🔍 Detect":
             st.markdown('<div style="background: rgba(0, 245, 255, 0.2); border: 1px solid #00f5ff; border-radius: 10px; padding: 1rem; text-align: center;"><h2>✅ LEGITIMATE</h2></div>', unsafe_allow_html=True)
             st.metric("Legitimate Probability", f"{probability[0]:.2%}")
 
-# Analysis Page
 elif page == "📊 Analysis":
     st.markdown('<h1 class="main-header">📊 Data Analysis</h1>', unsafe_allow_html=True)
     
