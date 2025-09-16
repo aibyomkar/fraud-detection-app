@@ -144,12 +144,6 @@ st.markdown("""
         height: 1px;
         background: linear-gradient(90deg, transparent, var(--primary), transparent);
     }
-    
-    .center-btn {
-        display: flex;
-        justify-content: center;
-        margin-top: 1rem;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -165,8 +159,8 @@ page = st.sidebar.radio("Navigate", [
 
 # Home Page
 if page == "🏠 Home":
-    st.markdown('<h1 class="main-header">💳 Creddy ML System</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Advanced Fraud Detection System</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">💳 Creddy</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #a9d6e5;">Fraud Detection In Credit Card Transactions</p>', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -176,7 +170,7 @@ if page == "🏠 Home":
     with col3:
         st.markdown('<div class="card"><h3>📈 Accurate</h3><p>99%+ precision</p></div>', unsafe_allow_html=True)
     
-    st.markdown('<div class="card"><h3>🎯 System Overview</h3><p>This system detects fraudulent credit card transactions using machine learning. Requires the Kaggle Credit Card Fraud dataset.</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h3>🎯 System Overview</h3><p>This system detects fraudulent credit card transactions using machine learning. Requires the Credit Card Fraud dataset.</p></div>', unsafe_allow_html=True)
     
     st.info("💡 Next: Upload dataset in '📤 Upload' section")
 
@@ -184,31 +178,23 @@ if page == "🏠 Home":
 elif page == "📤 Upload":
     st.markdown('<h1 class="main-header">📤 Upload Dataset</h1>', unsafe_allow_html=True)
     
-    st.markdown('<div class="card"><h2>📥 Get Dataset</h2></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><h2>📋 Dataset Requirements</h2><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
     
     # Create three columns: left content, OR, right content
     col1, col2, col3 = st.columns([4, 1, 4])
-    
+
     with col1:
-        st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
-    
+        st.markdown('<div class="card" style="height: 100%;"><h3>🌐 Download from Kaggle</h3><p>Get the official dataset used for training</p></div>', unsafe_allow_html=True)
+        st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
+        
     with col2:
         st.markdown('<div class="or-container"><div class="line"></div><div class="or-text">OR</div><div class="line"></div></div>', unsafe_allow_html=True)
-    
+        
     with col3:
-        st.markdown('''
-        <div class="card" style="height: 100%;">
-            <h3>🌐 Download from Kaggle</h3>
-            <p>Get the official dataset used for training</p>
-            <p><strong>File:</strong> creditcard.csv<br><strong>Size:</strong> ~150MB</p>
-            <div class="center-btn">
-        ''', unsafe_allow_html=True)
-        st.link_button("📥 Download Dataset", "https://www.kaggle.com/mlg-ulb/creditcardfraud", type="primary")
-        st.markdown('</div></div>', unsafe_allow_html=True)
-    
-    st.markdown('<div class="card"><h3>📋 Dataset Requirements</h3><p>Required columns: Time, V1-V28, Amount, Class<br>Format: CSV file</p></div>', unsafe_allow_html=True)
-    
+        st.markdown('<div class="card" style="height: 100%;"><h3>📁 Upload Your Dataset</h3><p>Use your own credit card fraud dataset</p></div>', unsafe_allow_html=True)
+        
+    uploaded_file = st.file_uploader("Choose CSV file", type="csv", label_visibility="collapsed")
+        
     # Handle file upload
     if uploaded_file is not None:
         try:
