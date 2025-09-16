@@ -1,9 +1,13 @@
 [theme]
-primaryColor="#F63366"
-backgroundColor="#FFFFFF"
-secondaryBackgroundColor="#F0F2F6"
-textColor="#262730"
+primaryColor="#00f5ff"
+backgroundColor="#0a0e17"
+secondaryBackgroundColor="#0d1b2a"
+textColor="#e0e1dd"
 font="sans serif"
 
 [server]
 maxUploadSize=200
+enableStaticServing = false
+
+[watcher]
+usePolling = true

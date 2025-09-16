@@ -8,6 +8,10 @@ from sklearn.model_selection import train_test_split
 import plotly.express as px
 from io import StringIO
 
+# Disable file watching to prevent inotify limit error
+os.environ['STREAMLIT_WATCHER_TYPE'] = 'none'
+os.environ['STREAMLIT_SERVER_ENABLE_STATIC_SERVING'] = 'false'
+
 # Create necessary directories
 for directory in ['data', 'models']:
     if not os.path.exists(directory):
@@ -272,38 +276,50 @@ elif page == "🔍 Detect":
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        time = st.number_input("Time", value=0)
-        v1 = st.number_input("V1", value=0.0)
-        v2 = st.number_input("V2", value=0.0)
-        v3 = st.number_input("V3", value=0.0)
-        v4 = st.number_input("V4", value=0.0)
+        time = st.number_input("Time", value=0.0, format="%.2f")
+        v1 = st.number_input("V1", value=0.0, format="%.6f")
+        v2 = st.number_input("V2", value=0.0, format="%.6f")
+        v3 = st.number_input("V3", value=0.0, format="%.6f")
+        v4 = st.number_input("V4", value=0.0, format="%.6f")
     
     with col2:
-        v5 = st.number_input("V5", value=0.0)
-        v6 = st.number_input("V6", value=0.0)
-        v7 = st.number_input("V7", value=0.0)
-        v8 = st.number_input("V8", value=0.0)
-        v9 = st.number_input("V9", value=0.0)
+        v5 = st.number_input("V5", value=0.0, format="%.6f")
+        v6 = st.number_input("V6", value=0.0, format="%.6f")
+        v7 = st.number_input("V7", value=0.0, format="%.6f")
+        v8 = st.number_input("V8", value=0.0, format="%.6f")
+        v9 = st.number_input("V9", value=0.0, format="%.6f")
     
     with col3:
-        v10 = st.number_input("V10", value=0.0)
-        amount = st.number_input("Amount", value=0.0)
-        v11 = st.number_input("V11", value=0.0)
-        v12 = st.number_input("V12", value=0.0)
+        v10 = st.number_input("V10", value=0.0, format="%.6f")
+        amount = st.number_input("Amount", value=0.0, format="%.2f")
+        v11 = st.number_input("V11", value=0.0, format="%.6f")
+        v12 = st.number_input("V12", value=0.0, format="%.6f")
+        v13 = st.number_input("V13", value=0.0, format="%.6f")
+        v14 = st.number_input("V14", value=0.0, format="%.6f")
+    
+    # Add remaining V columns
+    v_columns = []
+    for i in range(15, 29):
+        v_columns.append(st.number_input(f"V{i}", value=0.0, format="%.6f"))
     
     if st.button("🔍 Analyze Transaction"):
-        input_data = np.array([[time, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10,
-                               v11, v12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, amount]])
+        # Create complete input array with all 30 features (Time + V1-V28 + Amount)
+        input_data = [time, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10,
+                     v11, v12, v13, v14] + v_columns + [amount]
+        input_data = np.array([input_data])
         
-        prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0]
-        
-        if prediction == 1:
-            st.markdown('<div style="background: rgba(255, 42, 109, 0.2); border: 1px solid #ff2a6d; border-radius: 10px; padding: 1rem; text-align: center;"><h2>🚨 FRAUD DETECTED</h2></div>', unsafe_allow_html=True)
-            st.metric("Fraud Probability", f"{probability[1]:.2%}")
-        else:
-            st.markdown('<div style="background: rgba(0, 245, 255, 0.2); border: 1px solid #00f5ff; border-radius: 10px; padding: 1rem; text-align: center;"><h2>✅ LEGITIMATE</h2></div>', unsafe_allow_html=True)
-            st.metric("Legitimate Probability", f"{probability[0]:.2%}")
+        try:
+            prediction = model.predict(input_data)[0]
+            probability = model.predict_proba(input_data)[0]
+            
+            if prediction == 1:
+                st.markdown('<div style="background: rgba(255, 42, 109, 0.2); border: 1px solid #ff2a6d; border-radius: 10px; padding: 1rem; text-align: center;"><h2>🚨 FRAUD DETECTED</h2></div>', unsafe_allow_html=True)
+                st.metric("Fraud Probability", f"{probability[1]:.2%}")
+            else:
+                st.markdown('<div style="background: rgba(0, 245, 255, 0.2); border: 1px solid #00f5ff; border-radius: 10px; padding: 1rem; text-align: center;"><h2>✅ LEGITIMATE</h2></div>', unsafe_allow_html=True)
+                st.metric("Legitimate Probability", f"{probability[0]:.2%}")
+        except Exception as e:
+            st.error(f"Error during prediction: {str(e)}")
 
 # Analysis Page
 elif page == "📊 Analysis":
